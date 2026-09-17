@@ -1,0 +1,104 @@
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Game Hub</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;0,9..40,700;0,9..40,800&display=swap" rel="stylesheet">
+    {% tailwind_css %}
+    <style>
+        body { font-family: 'DM Sans', system-ui, sans-serif; }
+    </style>
+</head>
+<body class="bg-cream text-ink min-h-screen flex flex-col overflow-x-hidden">
+
+    <!-- ======= HEADER ======= -->
+    <header class="bg-card border-b-neo border-ink sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex items-center justify-between px-5 md:px-8 h-16">
+            <!-- Logo -->
+            <a href="/" class="flex items-center gap-2.5 group">
+                <div class="icon-neo bg-yellow">
+                    <span class="text-lg font-bold">G</span>
+                </div>
+                <span class="text-lg font-extrabold tracking-tight">Game Hub</span>
+            </a>
+
+            <!-- Nav -->
+            <nav class="hidden md:flex items-center gap-1.5">
+                <a href="/" class="px-4 py-2 text-sm font-bold rounded-neo-sm hover:bg-cream transition-colors duration-75">Home</a>
+                <a href="{% url 'games_list' %}" class="px-4 py-2 text-sm font-bold rounded-neo-sm hover:bg-cream transition-colors duration-75">Games</a>
+            </nav>
+
+            <!-- Right side -->
+            <div class="flex items-center gap-2">
+                {% if user.is_authenticated %}
+                    <span class="text-sm font-bold mr-2 hidden md:inline-block">{{ user.username }}</span>
+                    <form method="post" action="{% url 'logout' %}" class="hidden md:inline-block m-0">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-neo btn-neo-white text-sm py-2 px-5">Log Out</button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn-neo btn-neo-white text-sm py-2 px-5 hidden md:inline-flex">Log In</a>
+                    <a href="{% url 'signup' %}" class="btn-neo btn-neo-yellow text-sm py-2 px-5 hidden md:inline-flex">Sign Up</a>
+                {% endif %}
+
+                <!-- Mobile menu button -->
+                <button id="mobile-menu-btn" class="md:hidden icon-neo bg-cream">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile nav -->
+        <div id="mobile-menu" class="hidden md:hidden border-t-neo border-ink bg-card">
+            <a href="/" class="block px-6 py-3.5 text-sm font-bold border-b-neo border-ink hover:bg-cream">Home</a>
+            <a href="{% url 'games_list' %}" class="block px-6 py-3.5 text-sm font-bold border-b-neo border-ink hover:bg-cream">Games</a>
+            <div class="p-4 flex flex-col gap-2">
+                {% if user.is_authenticated %}
+                    <div class="px-2 py-1 text-sm font-bold">User: {{ user.username }}</div>
+                    <form method="post" action="{% url 'logout' %}" class="w-full m-0">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-neo btn-neo-white w-full text-sm py-2.5">Log Out</button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn-neo btn-neo-white w-full text-sm py-2.5">Log In</a>
+                    <a href="{% url 'signup' %}" class="btn-neo btn-neo-yellow w-full text-sm py-2.5">Sign Up</a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    <!-- ======= MAIN ======= -->
+    <main class="flex-1">
+        {% block content %}
+        {% endblock content %}
+    </main>
+
+    <!-- ======= FOOTER ======= -->
+    <footer class="bg-card border-t-neo border-ink mt-auto">
+        <div class="max-w-7xl mx-auto px-5 md:px-8 py-8 flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+                <div class="icon-neo bg-yellow">
+                    <span class="text-lg font-bold">G</span>
+                </div>
+                <span class="text-base font-extrabold">Game Hub</span>
+            </div>
+
+            <div class="badge-neo bg-cream text-xs">
+                &copy; 2026
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+        if (btn && menu) {
+            btn.addEventListener('click', () => menu.classList.toggle('hidden'));
+        }
+    </script>
+</body>
+</html>

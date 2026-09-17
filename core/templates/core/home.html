@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto px-5 md:px-8 py-16 md:py-24">
+    <!-- Hero -->
+    <div class="card-neo bg-yellow p-8 md:p-12 text-center mb-16 relative">
+        <h1 class="text-5xl md:text-6xl font-extrabold tracking-tight mb-6">
+            Play Awesome Games
+        </h1>
+        <p class="text-lg md:text-xl font-medium mb-8 max-w-2xl mx-auto">
+            Discover a collection of retro and modern web games built for pure fun. No downloads, no installs, just play.
+        </p>
+        <a href="{% url 'games_list' %}" class="btn-neo btn-neo-ink text-lg px-8 py-4">
+            Browse Games
+        </a>
+    </div>
+
+    <!-- Features -->
+    <div class="grid md:grid-cols-3 gap-6">
+        <div class="card-neo p-6 bg-card">
+            <div class="icon-neo bg-pink text-card mb-4 font-bold text-xl">1</div>
+            <h3 class="text-xl font-bold mb-2">Instant Play</h3>
+            <p class="text-sm font-medium">Jump right into the action. All our games run directly in your browser with zero setup required.</p>
+        </div>
+        
+        <div class="card-neo p-6 bg-card">
+            <div class="icon-neo bg-green text-card mb-4 font-bold text-xl">2</div>
+            <h3 class="text-xl font-bold mb-2">Track Scores</h3>
+            <p class="text-sm font-medium">Create an account to save your high scores and compete with other players on the leaderboards.</p>
+        </div>
+        
+        <div class="card-neo p-6 bg-card">
+            <div class="icon-neo bg-blue text-card mb-4 font-bold text-xl">3</div>
+            <h3 class="text-xl font-bold mb-2">New Games</h3>
+            <p class="text-sm font-medium">We regularly add new titles to our library, from action and puzzles to strategy and sports.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
