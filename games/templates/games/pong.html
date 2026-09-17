@@ -1,0 +1,240 @@
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@700&display=swap');
+    
+    #pong-canvas {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 4/3;
+        display: block;
+        background-color: #212529; /* Ink from palette */
+        image-rendering: pixelated;
+    }
+    .score-overlay {
+        position: absolute;
+        top: 2rem;
+        left: 0;
+        right: 0;
+        font-family: 'Space Mono', monospace;
+        color: #E9ECEF; /* Cream */
+        font-size: 3rem;
+        display: flex;
+        justify-content: center;
+        gap: 4rem;
+        pointer-events: none;
+        z-index: 10;
+    }
+    .game-over-screen {
+        position: absolute;
+        inset: 0;
+        background: rgba(33, 37, 41, 0.85); /* Ink transparent */
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        z-index: 20;
+    }
+    .game-over-screen h2 {
+        font-family: 'Space Mono', monospace;
+        font-size: 3rem;
+        color: #FB5607;
+        text-shadow: 4px 4px 0px #8338EC;
+        margin-bottom: 1rem;
+    }
+</style>
+
+<div class="relative w-full">
+    <canvas id="pong-canvas" width="800" height="600"></canvas>
+    
+    <div class="score-overlay">
+        <span id="score1">0</span>
+        <span id="score2">0</span>
+    </div>
+
+    <div class="game-over-screen" id="game-over">
+        <h2 id="winner-text">GAME OVER</h2>
+        <button id="restart-btn" class="btn-neo btn-neo-yellow text-xl px-8 py-3 mt-4" style="font-family: 'Space Mono', monospace;">
+            PLAY AGAIN
+        </button>
+    </div>
+</div>
+
+<script>
+    const canvas = document.getElementById('pong-canvas');
+    const ctx = canvas.getContext('2d');
+    const score1El = document.getElementById('score1');
+    const score2El = document.getElementById('score2');
+    const gameOverScreen = document.getElementById('game-over');
+    const winnerText = document.getElementById('winner-text');
+    const restartBtn = document.getElementById('restart-btn');
+
+    // Palette Colors
+    const COLOR_BG = '#212529'; // Ink
+    const COLOR_PADDLE = '#E9ECEF'; // Cream
+    const COLOR_BALL = '#FB5607'; // Orange
+    const COLOR_NET = '#8338EC'; // Purple
+
+    const paddleWidth = 15;
+    const paddleHeight = 100;
+    const ballSize = 15;
+    
+    let player1Y = (canvas.height - paddleHeight) / 2;
+    let player2Y = (canvas.height - paddleHeight) / 2;
+    let ballX = canvas.width / 2;
+    let ballY = canvas.height / 2;
+    let ballSpeedX = 5;
+    let ballSpeedY = 5;
+    
+    let score1 = 0;
+    let score2 = 0;
+    const WINNING_SCORE = 5;
+    
+    let isGameOver = false;
+    let isPaused = true;
+    let keys = {};
+
+    window.addEventListener('keydown', e => {
+        if (["Space", "ArrowUp", "ArrowDown", "w", "s", "W", "S"].includes(e.key)) {
+            e.preventDefault();
+        }
+        keys[e.key] = true;
+        
+        if (e.code === 'Space') {
+            if (isGameOver) {
+                initGame();
+            } else {
+                isPaused = !isPaused;
+            }
+        }
+    });
+
+    window.addEventListener('keyup', e => {
+        keys[e.key] = false;
+    });
+
+    function initGame() {
+        score1 = 0;
+        score2 = 0;
+        score1El.textContent = score1;
+        score2El.textContent = score2;
+        isGameOver = false;
+        isPaused = false;
+        gameOverScreen.style.display = 'none';
+        resetBall();
+    }
+
+    function resetBall() {
+        ballX = canvas.width / 2;
+        ballY = canvas.height / 2;
+        ballSpeedX = -ballSpeedX;
+        ballSpeedY = 5 * (Math.random() > 0.5 ? 1 : -1);
+    }
+
+    function drawNet() {
+        ctx.fillStyle = COLOR_NET;
+        for (let i = 0; i < canvas.height; i += 40) {
+            ctx.fillRect(canvas.width / 2 - 2, i + 10, 4, 20);
+        }
+    }
+
+    function update() {
+        if (isPaused || isGameOver) return;
+
+        // Player 1 Movement (W/S)
+        if ((keys['w'] || keys['W']) && player1Y > 0) player1Y -= 8;
+        if ((keys['s'] || keys['S']) && player1Y < canvas.height - paddleHeight) player1Y += 8;
+
+        // Player 2 Movement (AI or Up/Down)
+        // If someone presses Up/Down, override AI
+        let aiEnabled = !(keys['ArrowUp'] || keys['ArrowDown']);
+        
+        if (!aiEnabled) {
+            if (keys['ArrowUp'] && player2Y > 0) player2Y -= 8;
+            if (keys['ArrowDown'] && player2Y < canvas.height - paddleHeight) player2Y += 8;
+        } else {
+            // Simple AI
+            let center2 = player2Y + paddleHeight / 2;
+            if (center2 < ballY - 10) player2Y += 6;
+            if (center2 > ballY + 10) player2Y -= 6;
+            // Bound AI
+            player2Y = Math.max(0, Math.min(canvas.height - paddleHeight, player2Y));
+        }
+
+        // Ball Movement
+        ballX += ballSpeedX;
+        ballY += ballSpeedY;
+
+        // Top/Bottom collisions
+        if (ballY <= 0 || ballY >= canvas.height - ballSize) {
+            ballSpeedY = -ballSpeedY;
+        }
+
+        // Paddle collisions
+        if (ballX <= paddleWidth + 10) {
+            if (ballY + ballSize >= player1Y && ballY <= player1Y + paddleHeight) {
+                ballSpeedX = -ballSpeedX;
+                // Add spin/angle
+                let deltaY = ballY - (player1Y + paddleHeight / 2);
+                ballSpeedY = deltaY * 0.2;
+            }
+        }
+        
+        if (ballX >= canvas.width - paddleWidth - 10 - ballSize) {
+            if (ballY + ballSize >= player2Y && ballY <= player2Y + paddleHeight) {
+                ballSpeedX = -ballSpeedX;
+                let deltaY = ballY - (player2Y + paddleHeight / 2);
+                ballSpeedY = deltaY * 0.2;
+            }
+        }
+
+        // Scoring
+        if (ballX < 0) {
+            score2++;
+            score2El.textContent = score2;
+            checkWin();
+        } else if (ballX > canvas.width) {
+            score1++;
+            score1El.textContent = score1;
+            checkWin();
+        }
+    }
+
+    function checkWin() {
+        if (score1 >= WINNING_SCORE || score2 >= WINNING_SCORE) {
+            isGameOver = true;
+            winnerText.textContent = score1 >= WINNING_SCORE ? "PLAYER 1 WINS" : "PLAYER 2 WINS";
+            gameOverScreen.style.display = 'flex';
+        } else {
+            resetBall();
+        }
+    }
+
+    function draw() {
+        // Clear background
+        ctx.fillStyle = COLOR_BG;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        drawNet();
+
+        // Draw Paddles
+        ctx.fillStyle = COLOR_PADDLE;
+        ctx.fillRect(10, player1Y, paddleWidth, paddleHeight); // P1
+        ctx.fillRect(canvas.width - paddleWidth - 10, player2Y, paddleWidth, paddleHeight); // P2
+
+        // Draw Ball
+        ctx.fillStyle = COLOR_BALL;
+        ctx.fillRect(ballX, ballY, ballSize, ballSize);
+    }
+
+    function loop() {
+        update();
+        draw();
+        requestAnimationFrame(loop);
+    }
+
+    restartBtn.addEventListener('click', initGame);
+
+    // Start loop
+    draw(); // Draw initial state
+    requestAnimationFrame(loop);
+</script>
