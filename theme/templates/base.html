@@ -33,16 +33,19 @@
             </nav>
 
             <!-- Right side -->
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-4">
+                <a href="{% url 'games_list' %}" class="font-bold text-white hover:text-yellow-400 transition-colors hidden md:block">GAMES</a>
+                
                 {% if user.is_authenticated %}
-                    <span class="text-sm font-bold mr-2 hidden md:inline-block">{{ user.username }}</span>
-                    <form method="post" action="{% url 'logout' %}" class="hidden md:inline-block m-0">
+                    <a href="{% url 'dashboard' %}" class="btn-neo btn-neo-yellow text-sm py-2 px-4 border-2 hidden md:block">DASHBOARD</a>
+                    <span class="font-bold text-white hidden md:block">| {{ user.email }}</span>
+                    <form method="post" action="{% url 'account_logout' %}" class="hidden md:inline-block m-0">
                         {% csrf_token %}
                         <button type="submit" class="btn-neo btn-neo-white text-sm py-2 px-5">Log Out</button>
                     </form>
                 {% else %}
-                    <a href="{% url 'login' %}" class="btn-neo btn-neo-white text-sm py-2 px-5 hidden md:inline-flex">Log In</a>
-                    <a href="{% url 'signup' %}" class="btn-neo btn-neo-yellow text-sm py-2 px-5 hidden md:inline-flex">Sign Up</a>
+                    <a href="{% url 'account_login' %}" class="btn-neo btn-neo-white text-sm py-2 px-5 hidden md:inline-flex">Log In</a>
+                    <a href="{% url 'account_signup' %}" class="btn-neo btn-neo-yellow text-sm py-2 px-5 hidden md:inline-flex">Sign Up</a>
                 {% endif %}
 
                 <!-- Mobile menu button -->
@@ -56,16 +59,19 @@
         <div id="mobile-menu" class="hidden md:hidden border-t-neo border-ink bg-card">
             <a href="/" class="block px-6 py-3.5 text-sm font-bold border-b-neo border-ink hover:bg-cream">Home</a>
             <a href="{% url 'games_list' %}" class="block px-6 py-3.5 text-sm font-bold border-b-neo border-ink hover:bg-cream">Games</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'dashboard' %}" class="block px-6 py-3.5 text-sm font-bold text-yellow-400 border-b-neo border-ink hover:bg-cream">Dashboard</a>
+            {% endif %}
             <div class="p-4 flex flex-col gap-2">
                 {% if user.is_authenticated %}
-                    <div class="px-2 py-1 text-sm font-bold">User: {{ user.username }}</div>
-                    <form method="post" action="{% url 'logout' %}" class="w-full m-0">
+                    <div class="px-2 py-1 text-sm font-bold">User: {{ user.email }}</div>
+                    <form method="post" action="{% url 'account_logout' %}" class="w-full m-0">
                         {% csrf_token %}
                         <button type="submit" class="btn-neo btn-neo-white w-full text-sm py-2.5">Log Out</button>
                     </form>
                 {% else %}
-                    <a href="{% url 'login' %}" class="btn-neo btn-neo-white w-full text-sm py-2.5">Log In</a>
-                    <a href="{% url 'signup' %}" class="btn-neo btn-neo-yellow w-full text-sm py-2.5">Sign Up</a>
+                    <a href="{% url 'account_login' %}" class="btn-neo btn-neo-white w-full text-sm py-2.5">Log In</a>
+                    <a href="{% url 'account_signup' %}" class="btn-neo btn-neo-yellow w-full text-sm py-2.5">Sign Up</a>
                 {% endif %}
             </div>
         </div>

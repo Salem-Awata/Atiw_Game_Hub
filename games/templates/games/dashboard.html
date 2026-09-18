@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-5 py-12">
+    <div class="card-neo bg-[#E9ECEF] p-8 border-4 border-ink">
+        <h1 class="text-4xl font-black mb-4 text-ink tracking-tight uppercase">Developer Dashboard</h1>
+        <p class="text-xl font-bold text-ink/80 mb-8 border-b-neo border-ink pb-6">Upload your Python code below to publish a new game!</p>
+
+        <form method="POST" class="space-y-6">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xl font-bold text-ink mb-2">Game Title</label>
+                    {{ form.title.errors }}
+                    <input type="text" name="title" class="w-full bg-white border-neo border-ink p-3 text-lg font-bold focus:outline-none focus:ring-4 focus:ring-[#8338EC]/50" required>
+                </div>
+                
+                <div>
+                    <label class="block text-xl font-bold text-ink mb-2">Description</label>
+                    {{ form.description.errors }}
+                    <textarea name="description" rows="3" class="w-full bg-white border-neo border-ink p-3 text-lg font-medium focus:outline-none focus:ring-4 focus:ring-[#8338EC]/50" required></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-xl font-bold text-ink mb-2">Python Script (PyScript) <span class="text-sm font-normal text-ink/70">Runs directly in the browser!</span></label>
+                    {{ form.python_code.errors }}
+                    {{ form.python_code }}
+                </div>
+            </div>
+
+            <button type="submit" class="w-full btn-neo bg-[#FB5607] hover:bg-[#d94905] text-white text-2xl py-6 mt-8 uppercase tracking-widest font-black">
+                🚀 PUBLISH GAME 🚀
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

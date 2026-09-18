@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load allauth %}
+
+{% block content %}
+<div class="max-w-md mx-auto px-5 py-16">
+    <div class="card-neo bg-[#8338EC] p-8 text-white">
+        <h1 class="text-4xl font-black mb-6 tracking-tight uppercase border-b-neo border-white pb-4">Sign Up</h1>
+
+        {% url 'account_signup' as signup_url %}
+        <form class="space-y-6 text-ink" method="POST" action="{{ signup_url }}">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            
+            {% for field in form %}
+            <div>
+                <label class="block text-lg font-bold text-white mb-2">{{ field.label }}</label>
+                {{ field.errors }}
+                <input type="{{ field.field.widget.input_type }}" name="{{ field.html_name }}" class="w-full bg-white border-neo border-ink p-3 font-medium focus:outline-none focus:ring-4 focus:ring-yellow-400/50" required>
+            </div>
+            {% endfor %}
+
+            <button type="submit" class="w-full btn-neo btn-neo-yellow text-xl py-4 mt-6 uppercase tracking-widest font-bold">
+                Create Account
+            </button>
+        </form>
+
+        <div class="mt-8 text-center font-bold border-t-neo border-white pt-6">
+            <p class="mb-4 text-white">Or sign up with</p>
+            {% load socialaccount %}
+            <a href="{% provider_login_url 'google' %}" class="inline-block w-full btn-neo bg-white hover:bg-gray-100 text-ink text-lg py-3 uppercase tracking-wider font-bold">
+                Continue with Google
+            </a>
+        </div>
+
+        <div class="mt-6 text-center text-sm font-bold text-white">
+            <p>Already have an account? <a href="{% url 'account_login' %}" class="text-yellow-400 hover:text-yellow-300 underline decoration-2 underline-offset-4">Log In</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

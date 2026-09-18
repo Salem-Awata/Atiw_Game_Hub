@@ -6,6 +6,7 @@ class Game(models.Model):
     description = models.TextField()
     cover_image_url = models.URLField(blank=True, null=True)
     template_name = models.CharField(max_length=100)
+    python_code = models.TextField(blank=True, null=True, help_text="Upload your raw Python code for PyScript games.")
 
     def __str__(self):
         return self.title

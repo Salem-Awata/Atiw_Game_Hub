@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Include PyScript -->
+<link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css" />
+<script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
+
+<div class="max-w-4xl mx-auto px-5 py-12">
+    <div class="mb-8 flex items-center justify-between">
+        <h1 class="text-5xl font-black text-ink uppercase tracking-tight">{{ game.title }}</h1>
+        <a href="{% url 'games_list' %}" class="btn-neo bg-white hover:bg-gray-100 text-ink px-6 py-2 font-bold uppercase text-sm">&larr; Back to Arcade</a>
+    </div>
+    
+    <div class="card-neo bg-[#212529] p-4 lg:p-8 flex flex-col items-center border-4 border-ink shadow-[8px_8px_0px_0px_#FB5607]">
+        <!-- Output container for PyScript -->
+        <div id="pyscript-output" class="w-full min-h-[400px] bg-white text-ink font-mono p-4 border-neo border-ink overflow-auto">
+            <span class="text-gray-400">Initializing Python Engine...</span>
+        </div>
+    </div>
+
+    <div class="mt-8 card-neo bg-cream p-6 border-4 border-ink shadow-[4px_4px_0px_0px_#8338EC]">
+        <h2 class="text-2xl font-black mb-2 uppercase">About</h2>
+        <p class="text-lg font-medium text-ink/80">{{ game.description }}</p>
+    </div>
+</div>
+
+<!-- Execute the user's Python code -->
+<script type="py" terminal>
+import sys
+import js
+from pyscript import document
+
+# Clear loading text
+document.getElementById('pyscript-output').innerHTML = ''
+
+try:
+{{ game.python_code|safe }}
+except Exception as e:
+    print(f"Error running game: {e}")
+</script>
+
+{% endblock %}
