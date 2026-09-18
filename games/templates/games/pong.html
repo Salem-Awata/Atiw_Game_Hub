@@ -204,6 +204,18 @@
             isGameOver = true;
             winnerText.textContent = score1 >= WINNING_SCORE ? "PLAYER 1 WINS" : "PLAYER 2 WINS";
             gameOverScreen.style.display = 'flex';
+            
+            const winningScore = Math.max(score1, score2);
+            setTimeout(() => {
+                const initials = prompt(`GAME OVER! ${winnerText.textContent}\nEnter 3-letter initials for the Global Leaderboard:`, "AAA");
+                if (initials) {
+                    fetch(`/games/{{ game.slug }}/submit_score/`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ initials: initials.substring(0,3), score: winningScore })
+                    }).then(() => { window.location.reload(); });
+                }
+            }, 100);
         } else {
             resetBall();
         }

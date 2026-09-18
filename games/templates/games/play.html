@@ -29,6 +29,41 @@
             <span class="badge-neo bg-cream">Press Space to Pause/Start</span>
         </div>
     </div>
+
+    <!-- Global Leaderboard -->
+    <div class="card-neo bg-cream p-6 md:p-8">
+        <h2 class="text-3xl font-black mb-6 text-ink flex items-center gap-3">
+            <span class="text-orange-500">🏆</span> GLOBAL LEADERBOARD
+        </h2>
+        
+        {% if top_scores %}
+            <div class="overflow-x-auto border-neo border-ink">
+                <table class="w-full text-left font-bold border-collapse">
+                    <thead class="bg-ink text-cream">
+                        <tr>
+                            <th class="p-4 border-b-neo border-ink w-16">RANK</th>
+                            <th class="p-4 border-b-neo border-ink border-l-neo border-r-neo text-center">INITIALS</th>
+                            <th class="p-4 border-b-neo border-ink text-right">SCORE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for s in top_scores %}
+                        <tr class="border-b-neo border-ink hover:bg-yellow-400 transition-colors">
+                            <td class="p-4 text-ink/60">#{{ forloop.counter }}</td>
+                            <td class="p-4 text-2xl tracking-[0.2em] text-center border-l-neo border-r-neo border-ink">{{ s.player_initials }}</td>
+                            <td class="p-4 text-2xl text-orange-600 text-right">{{ s.score }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="p-8 text-center border-neo border-dashed border-ink/40 bg-ink/5">
+                <p class="text-xl font-bold text-ink/60 mb-2">NO SCORES YET</p>
+                <p class="text-sm font-medium text-ink/50">Be the first to set a high score!</p>
+            </div>
+        {% endif %}
+    </div>
 </div>
 
 <script>

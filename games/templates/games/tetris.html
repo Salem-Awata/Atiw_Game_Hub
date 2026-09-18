@@ -257,6 +257,19 @@
         if (collide(board, player)) {
             isGameOver = true;
             gameOverScreen.style.display = 'flex';
+            
+            if (score > 0) {
+                setTimeout(() => {
+                    const initials = prompt("GAME OVER!\nEnter 3-letter initials for the Global Leaderboard:", "AAA");
+                    if (initials) {
+                        fetch(`/games/{{ game.slug }}/submit_score/`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ initials: initials.substring(0,3), score: score })
+                        }).then(() => { window.location.reload(); });
+                    }
+                }, 100);
+            }
         }
     }
 

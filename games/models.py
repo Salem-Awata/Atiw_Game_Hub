@@ -9,3 +9,15 @@ class Game(models.Model):
 
     def __str__(self):
         return self.title
+
+class Score(models.Model):
+    game = models.ForeignKey(Game, on_delete=models.CASCADE, related_name='scores')
+    player_initials = models.CharField(max_length=3)
+    score = models.IntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-score']
+
+    def __str__(self):
+        return f"{self.player_initials} - {self.score} on {self.game.title}"
