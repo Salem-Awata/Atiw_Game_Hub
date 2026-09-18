@@ -11,21 +11,21 @@ def games_list(request):
                 'title': 'Neon Snake',
                 'slug': 'snake',
                 'description': 'A retro classic reborn with a sleek neon aesthetic. Eat the glowing dots to grow, but do not crash into yourself!',
-                'cover_image_url': 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=800&q=80',
+                'cover_image_url': '/static/images/snake_cover.jpg',
                 'template_name': 'games/snake.html'
             },
             {
                 'title': 'Brutal Pong',
                 'slug': 'pong',
                 'description': 'The grandfather of video games with a raw, high-contrast brutalist edge. Defeat the AI or a friend locally.',
-                'cover_image_url': 'https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?auto=format&fit=crop&w=800&q=80',
+                'cover_image_url': '/static/images/pong_cover.jpg',
                 'template_name': 'games/pong.html'
             },
             {
                 'title': 'Block Drop',
                 'slug': 'tetris',
                 'description': 'Stack falling blocks to clear lines and rack up a massive high score. Fast, unforgiving, addictive.',
-                'cover_image_url': 'https://images.unsplash.com/photo-1628155930542-3c7a64e2c833?auto=format&fit=crop&w=800&q=80',
+                'cover_image_url': '/static/images/tetris_cover.jpg',
                 'template_name': 'games/tetris.html'
             }
         ]
