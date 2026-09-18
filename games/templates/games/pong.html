@@ -59,6 +59,17 @@
     </div>
 </div>
 
+<!-- Mobile Touch Controls -->
+<div class="md:hidden mt-6 flex flex-col items-center gap-6 select-none touch-manipulation">
+    <div class="flex gap-4">
+        <button id="btn-up" class="btn-neo btn-neo-white w-20 h-20 text-3xl flex items-center justify-center p-0">⬆️</button>
+        <button id="btn-down" class="btn-neo btn-neo-white w-20 h-20 text-3xl flex items-center justify-center p-0">⬇️</button>
+    </div>
+    <button id="btn-action" class="btn-neo bg-[#8338EC] hover:bg-[#9d4edd] text-white w-64 py-4 text-xl font-bold tracking-[0.2em]">
+        START / PAUSE
+    </button>
+</div>
+
 <script>
     const canvas = document.getElementById('pong-canvas');
     const ctx = canvas.getContext('2d');
@@ -245,6 +256,30 @@
     }
 
     restartBtn.addEventListener('click', initGame);
+
+    // Mobile Controls
+    const handleAction = (e) => {
+        if(e) e.preventDefault();
+        if (isGameOver) {
+            initGame();
+        } else {
+            isPaused = !isPaused;
+        }
+    };
+
+    const btnUp = document.getElementById('btn-up');
+    const btnDown = document.getElementById('btn-down');
+    const btnAction = document.getElementById('btn-action');
+
+    btnUp.addEventListener('pointerdown', (e) => { e.preventDefault(); keys['w'] = true; });
+    btnUp.addEventListener('pointerup', (e) => { e.preventDefault(); keys['w'] = false; });
+    btnUp.addEventListener('pointerleave', (e) => { e.preventDefault(); keys['w'] = false; });
+
+    btnDown.addEventListener('pointerdown', (e) => { e.preventDefault(); keys['s'] = true; });
+    btnDown.addEventListener('pointerup', (e) => { e.preventDefault(); keys['s'] = false; });
+    btnDown.addEventListener('pointerleave', (e) => { e.preventDefault(); keys['s'] = false; });
+
+    btnAction.addEventListener('pointerdown', handleAction);
 
     // Start loop
     draw(); // Draw initial state

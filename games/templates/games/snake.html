@@ -53,6 +53,21 @@
     </div>
 </div>
 
+<!-- Mobile Touch Controls -->
+<div class="md:hidden mt-6 flex flex-col items-center gap-6 select-none touch-manipulation">
+    <div class="grid grid-cols-3 gap-3">
+        <div></div>
+        <button id="btn-up" class="btn-neo btn-neo-white w-16 h-16 text-2xl flex items-center justify-center p-0">⬆️</button>
+        <div></div>
+        <button id="btn-left" class="btn-neo btn-neo-white w-16 h-16 text-2xl flex items-center justify-center p-0">⬅️</button>
+        <button id="btn-down" class="btn-neo btn-neo-white w-16 h-16 text-2xl flex items-center justify-center p-0">⬇️</button>
+        <button id="btn-right" class="btn-neo btn-neo-white w-16 h-16 text-2xl flex items-center justify-center p-0">➡️</button>
+    </div>
+    <button id="btn-action" class="btn-neo bg-[#8338EC] hover:bg-[#9d4edd] text-white w-64 py-4 text-xl font-bold tracking-[0.2em]">
+        START / PAUSE
+    </button>
+</div>
+
 <script>
     const canvas = document.getElementById('snake-canvas');
     const ctx = canvas.getContext('2d');
@@ -260,6 +275,22 @@
     });
 
     restartBtn.addEventListener('click', initGame);
+
+    // Mobile Controls
+    const handleAction = (e) => {
+        if(e) e.preventDefault();
+        if (isGameOver) {
+            initGame();
+        } else {
+            isPaused = !isPaused;
+        }
+    };
+
+    document.getElementById('btn-up').addEventListener('pointerdown', (e) => { e.preventDefault(); if (!isPaused && velocity.y !== 1) velocity = { x: 0, y: -1 }; });
+    document.getElementById('btn-down').addEventListener('pointerdown', (e) => { e.preventDefault(); if (!isPaused && velocity.y !== -1) velocity = { x: 0, y: 1 }; });
+    document.getElementById('btn-left').addEventListener('pointerdown', (e) => { e.preventDefault(); if (!isPaused && velocity.x !== 1) velocity = { x: -1, y: 0 }; });
+    document.getElementById('btn-right').addEventListener('pointerdown', (e) => { e.preventDefault(); if (!isPaused && velocity.x !== -1) velocity = { x: 1, y: 0 }; });
+    document.getElementById('btn-action').addEventListener('pointerdown', handleAction);
 
     // Initial draw before start
     initGame();
