@@ -23,7 +23,7 @@ export const games: Game[] = [
     version: "1.0.0",
     releaseDate: "20. September 2026",
     mobile: true,
-    accent: "blue",
+    accent: "sky",
     scoreLabel: "Chips",
   },
   {
@@ -35,7 +35,7 @@ export const games: Game[] = [
     version: "1.0.0",
     releaseDate: "20. September 2026",
     mobile: true,
-    accent: "purple",
+    accent: "amber",
     scoreLabel: "Chips",
   },
 ];

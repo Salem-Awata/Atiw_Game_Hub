@@ -40,3 +40,18 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Generated Django static files
+/staticfiles/
+
+# Local database
+/db.sqlite3
+
+# Nested project copy
+/Atiw_Game_Hub/

@@ -86,7 +86,11 @@ export function GamePlayer({ game }: { game: Game }) {
       if (event.data.type === "GAME_STARTED") {
         void startScoreSession();
       }
-      if (event.data.type === "GAME_OVER" && Number.isInteger(event.data.score)) {
+      if (
+        event.data.type === "GAME_OVER" &&
+        typeof event.data.score === "number" &&
+        Number.isInteger(event.data.score)
+      ) {
         void submitScore(event.data.score, event.data.version);
       }
     };
